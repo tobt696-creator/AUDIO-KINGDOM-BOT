@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-import asyncio
 import os
+from datetime import datetime, timedelta
 
 PREFIX_FILE = "prefix.txt"
 
@@ -66,7 +66,7 @@ async def ban(ctx, member: discord.Member, *, reason=None):
 @commands.has_permissions(moderate_members=True)
 async def mute(ctx, member: discord.Member, duration: int = 10, *, reason=None):
     try:
-        await member.edit(timeout=discord.utils.utcnow() + discord.timedelta(minutes=duration), reason=reason)
+        await member.edit(timeout=datetime.utcnow() + timedelta(minutes=duration), reason=reason)
         await ctx.send(f'User {member} has been muted for {duration} minutes.')
     except Exception as e:
         await ctx.send(f'Failed to mute {member}: {e}')
@@ -91,8 +91,10 @@ async def mod_error(ctx, error):
     else:
         await ctx.send(f"An error occurred: {error}")
 
-import os
-
+# ---- Token setup ----
 TOKEN = os.getenv("DISCORD_TOKEN")
-bot.run(TOKEN)
+if TOKEN is None:
+    print("Error: DISCORD_TOKEN environment variable not found!")
+    exit(1)
 
+bot.run(TOKEN)
