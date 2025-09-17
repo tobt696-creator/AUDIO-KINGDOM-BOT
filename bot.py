@@ -24,7 +24,6 @@ warns = {}
 class ModerationBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=get_prefix, intents=intents)
-        self.tree = app_commands.CommandTree(self)
 
     async def on_ready(self):
         print(f'Logged in as {self.user}')
@@ -92,4 +91,8 @@ async def mod_error(ctx, error):
     else:
         await ctx.send(f"An error occurred: {error}")
 
-bot.run('MTQxNzkxNzMxMjI2MTk1MTQ5OA.GSi4AZ.ECRiD-yktIM-HRG49tiEjkjsPCfyHM8-4TMoac') 
+import os
+
+TOKEN = os.getenv("DISCORD_TOKEN")
+bot.run(TOKEN)
+
